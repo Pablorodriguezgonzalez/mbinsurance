@@ -70,4 +70,43 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    // Contact Form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+            const message = document.getElementById('message').value;
+
+            // Validar el número de teléfono
+            const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            if (!phoneRegex.test(telefono)) {
+                alert('Por favor, ingresa un número de teléfono válido con formato de Estados Unidos.');
+                return;
+            }
+
+            // Enviar correo electrónico
+            const templateParams = {
+                from_name: name,
+                from_email: email,
+                from_phone: telefono,
+                message: message,
+                to_email: 'healthinsurance@mitziblanco.com'
+            };
+
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams, 'YOUR_USER_ID')
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.');
+                    contactForm.reset();
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.');
+                });
+        });
+    }
 });
