@@ -829,12 +829,14 @@ body {
     scroll-snap-align: center;
     opacity: 1;
     transition: opacity 0.5s ease;
+    display: flex; /* Para que el contenido se estire a la misma altura */
 }
 
 .testimonial-content {
     background: white;
     padding: 40px;
     border-radius: 20px;
+    width: 100%; /* Asegura que la tarjeta ocupe todo el ancho */
 }
 
 .testimonial-content p {
