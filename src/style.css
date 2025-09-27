@@ -133,6 +133,12 @@ body {
     padding: 8px 0;
 }
 
+.top-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .social-links {
     display: flex;
     gap: 15px;
@@ -250,7 +256,7 @@ body {
 }
 
 .phone-main {
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .mobile-menu-toggle {
@@ -265,7 +271,7 @@ body {
 .mobile-menu-toggle span {
     width: 25px;
     height: 3px;
-    background: #333;
+    background: white;
     margin: 3px 0;
     transition: 0.3s;
 }
@@ -1041,6 +1047,12 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 992px) {
+    .process-steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 0 15px;
