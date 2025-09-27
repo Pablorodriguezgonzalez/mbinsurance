@@ -30,22 +30,69 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Testimonials Carousel
+    const carousel = document.querySelector('.testimonials-carousel');
     const testimonialItems = document.querySelectorAll('.testimonial-item');
     const indicators = document.querySelectorAll('.indicator');
+    let currentTestimonial = 0;
 
     function showTestimonial(index) {
-        testimonialItems.forEach(function (item, i) {
-            item.classList.toggle('active', i === index);
-        });
-        indicators.forEach(function (indicator, i) {
-            indicator.classList.toggle('active', i === index);
+        currentTestimonial = index;
+        const offset = testimonialItems[index].offsetLeft;
+        carousel.scrollLeft = offset;
+        updateIndicators();
+    }
+
+    function updateIndicators() {
+        indicators.forEach((indicator, i) => {
+            indicator.classList.toggle('active', i === currentTestimonial);
         });
     }
 
-    indicators.forEach(function (indicator, index) {
-        indicator.addEventListener('click', function () {
-            showTestimonial(index);
-        });
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => showTestimonial(index));
+    });
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    carousel.addEventListener('mousedown', (e) => {
+        isDown = true;
+        carousel.classList.add('active');
+        startX = e.pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+        isDown = false;
+        carousel.classList.remove('active');
+    });
+
+    carousel.addEventListener('mouseup', () => {
+        isDown = false;
+        carousel.classList.remove('active');
+        // Snap to the nearest testimonial
+        const itemWidth = testimonialItems[0].offsetWidth;
+        const newIndex = Math.round(carousel.scrollLeft / itemWidth);
+        showTestimonial(newIndex);
+    });
+
+    carousel.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - carousel.offsetLeft;
+        const walk = (x - startX) * 2; //scroll-fast
+        carousel.scrollLeft = scrollLeft - walk;
+    });
+
+    // Update indicators on scroll
+    carousel.addEventListener('scroll', () => {
+        const itemWidth = testimonialItems[0].offsetWidth;
+        const newIndex = Math.round(carousel.scrollLeft / itemWidth);
+        if (newIndex !== currentTestimonial) {
+            currentTestimonial = newIndex;
+            updateIndicators();
+        }
     });
 
     // Expose the function to the global scope so it can be called from the HTML
